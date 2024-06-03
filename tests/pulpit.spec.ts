@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Pulpit tests', () => {
-  test('quick payment with correct data', async ({ page }) => {
+  test.only('quick payment with correct data', async ({ page }) => {
     // Arrange
     const url = 'https://demo-bank.vercel.app/';
     const userId = 'testerLO';
@@ -15,7 +15,7 @@ test.describe('Pulpit tests', () => {
     // Act
     await page.goto(url);
     await page.getByTestId('login-input').fill(userId);
-    await page.getByTestId('password-input').fill(userPassword);
+    await page.getByTestId('password-input-lol').fill(userPassword);
     await page.getByTestId('login-button').click();
 
     await page.locator('#widget_1_transfer_receiver').selectOption(receiverId);
