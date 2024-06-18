@@ -1,16 +1,19 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Pulpit tests', () => {
-  test('quick payment with correct data', async ({ page }) => {
-    test.beforeEach(async ({ page }) => {
-      const url = 'https://demo-bank.vercel.app/';
-      await page.goto(url);
-      
-    });
-    // Arrange
+  test.beforeEach(async ({ page }) => {
+    const url = 'https://demo-bank.vercel.app/';
     const userId = 'testerLO';
     const userPassword = '12345678';
+    
+    await page.goto(url);
+    await page.getByTestId('login-input').fill(userId);
+    await page.getByTestId('password-input').fill(userPassword);
+    await page.getByTestId('login-button').click();
+  });
 
+  test('quick payment with correct data', async ({ page }) => {
+    // Arrange
     const receiverId = '2';
     const transferAmount = '150';
     const transferTitle = 'pizza';
@@ -18,10 +21,6 @@ test.describe('Pulpit tests', () => {
     const expectedErrorMessage = `Przelew wykonany! ${expectedTransferReceiver} - ${transferAmount},00PLN - ${transferTitle}`;
 
     // Act
-    await page.getByTestId('login-input').fill(userId);
-    await page.getByTestId('password-input').fill(userPassword);
-    await page.getByTestId('login-button').click();
-
     await page.locator('#widget_1_transfer_receiver').selectOption(receiverId);
     await page.locator('#widget_1_transfer_amount').fill(transferAmount);
     await page.locator('#widget_1_transfer_title').fill(transferTitle);
@@ -37,18 +36,11 @@ test.describe('Pulpit tests', () => {
 
   test('successful mobile top-up', async ({ page }) => {
     // Arrange
-    const userId = 'testerLO';
-    const userPassword = '12345678';
-
     const topupReceiver = '500 xxx xxx';
     const topupAmount = '50';
     const expectedErrorMessage = `Doładowanie wykonane! ${topupAmount},00PLN na numer ${topupReceiver}`;
 
     //Act
-    await page.getByTestId('login-input').fill(userId);
-    await page.getByTestId('password-input').fill(userPassword);
-    await page.getByTestId('login-button').click();
-
     await page.locator('#widget_1_topup_receiver').selectOption(topupReceiver);
     await page.locator('#widget_1_topup_amount').fill(topupAmount);
     await page.locator('#uniform-widget_1_topup_agreement').check(); //do zaznaczania checkboxa
