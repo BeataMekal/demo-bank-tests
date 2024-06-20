@@ -6,7 +6,7 @@ test.describe('User login to Demobank', () => {
     await page.goto('/')
   });
 
-  test.only('successful login with correct credentials', async ({ page }) => {
+  test('successful login with correct credentials', async ({ page }) => {
     // Arrange
     const userId = 'testerLO';
     const userPassword = '12345678';

@@ -51,4 +51,23 @@ test.describe('Pulpit tests', () => {
       expectedErrorMessage,
     );
   });
+
+  test('correct balance after successful mobile top-up', async ({ page }) => {
+    // Arrange
+    const topupReceiver = '500 xxx xxx';
+    const topupAmount = '50';
+    const expectedErrorMessage = `Doładowanie wykonane! ${topupAmount},00PLN na numer ${topupReceiver}`;
+    const initialBalance = await page.locator('#money_value').innerText();
+    const expectedBalance = Number(initialBalance) - Number(topupAmount);
+
+    //Act
+    await page.locator('#widget_1_topup_receiver').selectOption(topupReceiver);
+    await page.locator('#widget_1_topup_amount').fill(topupAmount);
+    await page.locator('#uniform-widget_1_topup_agreement').check(); //do zaznaczania checkboxa
+    await page.getByRole('button', { name: 'doładuj telefon' }).click();
+    await page.getByTestId('close-button').click();
+
+    // Assert
+    await expect(page.locator('#money_value')).toHaveText(`${expectedBalance}`);
+  });
 });
