@@ -26,4 +26,29 @@ export class PulpitPage {
   });
 
   moneyValueText = this.page.locator('#money_value');
+
+  async executeQuickPayment(
+    receiverId: string,
+    transferAmount: string,
+    transferTitle: string,
+  ): Promise<void> {
+    await this.transferReceiverInput.selectOption(receiverId);
+    await this.transferAmountInput.fill(transferAmount);
+    await this.transferTitleInput.fill(transferTitle);
+
+    await this.transferButton.click();
+    await this.actionCloseButton.click();
+  }
+
+  async executeMobileTopUp(
+    topupReceiver: string,
+    topupAmount: string,
+  ): Promise<void> {
+    await this.topupReceiverInput.selectOption(topupReceiver);
+    await this.topupAmoutInput.fill(topupAmount);
+    await this.topupAgreementCheckbox.check(); //to check checkbox
+
+    await this.topupExecuteButton.click();
+    await this.actionCloseButton.click();
+  }
 }
